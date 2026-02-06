@@ -1,65 +1,87 @@
-import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ChevronRight } from "lucide-react";
+import { Balancer } from "react-wrap-balancer";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="md:max-w-[90vw] flex flex-col justify-between md:h-screen md:border-x mx-auto">
+      <header className="md:flex items-center hidden justify-between p-10 pb-0">
+        <h3 className="flex-1">reconn</h3>
+        <nav className="flex-2 md:max-w-[500px]">
+          <ul className="flex items-center justify-between">
+            {["company", "pricing", "terms", "privacy", "contact"].map(
+              (item, index) => (
+                <li
+                  className="border-b border-b-foreground capitalize"
+                  key={index}
+                >
+                  {item}
+                </li>
+              ),
+            )}
+          </ul>
+        </nav>
+      </header>
+
+      <div className="md:max-w-[900px] space-y-4 p-10">
+        <h1 className="text-2xl md:text-[52px]">
+          Reconciliation Minus the Overhead
+        </h1>
+        <p className="text-xl">
+          <Balancer>
+            No need for endless spreadsheets and manual checks. Our tool helps
+            FinTechs reconcile transactions faster, save time, reduce errors,
+            and make audits effortless.
+          </Balancer>
+        </p>
+      </div>
+
+      <div className="flex flex-col md:flex-row items-start gap-20 space-evenly mx-auto p-10">
+        <div className="flex-1">
+          <p className="text-xl">
+            Automatically reconcile transactions across providers, highlights
+            exceptions, and give your team a clear, auditable view of what
+            actually happened to the money. Join early to be the first to try
+            it.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="flex-1">
+          <h3 className="text-xl mb-2 border-b w-fit border-b-black">
+            Key Benefits
+          </h3>
+          <ol className="list-inside list-disc md:text-xl space-y-1">
+            <li>Built with compliance and auditability in mind</li>
+            <li>Auto-match internal &amp; provider transactions</li>
+            <li>Flag exceptions &amp; prioritize what matters</li>
+            <li>Keep a fully auditable trail for compliance</li>
+            <li>Reduce hours of manual reconciliation to minutes</li>
+          </ol>
         </div>
-      </main>
-    </div>
+      </div>
+
+      <div className="md:border-y p-10">
+        <h3 className="text-2xl font-[500]! mb-4">
+          Join the Early Access List{" "}
+          <span className="block md:inline text-xl opacity-50 font-normal">
+            (Only limited spots available)
+          </span>
+        </h3>
+        <form className="flex gap-2 items-center md:max-w-[500px]">
+          <Input
+            required
+            type="email"
+            name="business_email"
+            placeholder="Your business email"
+          />
+          <Button className="h-12">
+            Notify me <ChevronRight />
+          </Button>
+        </form>
+        <small>
+          We respect your privacy. No spam. Only updates about the launch.
+        </small>
+      </div>
+    </main>
   );
 }
