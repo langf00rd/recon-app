@@ -1,0 +1,123 @@
+"use client";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { batchNormalize } from "@/lib/engine/normalizer";
+import { TransactionType } from "@/lib/enums";
+import { CanonicalTransaction } from "@/lib/types";
+import { useState } from "react";
+import { Button } from "../ui/button";
+
+export default function NormalizationDialog(props: {
+  keys: string[];
+  children: React.ReactNode;
+  type: TransactionType;
+  transactions: Record<string, unknown>[];
+  onNormalizedData: (data: Partial<CanonicalTransaction>[]) => void;
+}) {
+  const [map, setMap] = useState<{ [key: string]: string }>({});
+
+  const canonicalTransaction: Partial<CanonicalTransaction> = {
+    amount: 0,
+    created_dt: "",
+    id: "",
+    reference: "",
+    // currency: "",
+    // transaction_dt: "",
+    // id: "",
+    // updated_dt: "",
+    // processed_dt: "",
+    // source_name: "",
+    // source: "TransactionType",
+    // upload_by: "",
+    // raw: {},
+  };
+
+  function handleNormalization() {
+    const normalizedData = batchNormalize(map, props.transactions);
+    props.onNormalizedData(normalizedData);
+  }
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{props.children}</DialogTrigger>
+      <DialogContent className="space-y-6">
+        <DialogHeader className="border-b pb-4">
+          <DialogTitle>Match fields to canonical schema</DialogTitle>
+          <DialogDescription>
+            This ensures that your data is consistent with the canonical schema
+            our platform understands. This step is crucial for producing valid
+            reconciliation results
+          </DialogDescription>
+        </DialogHeader>
+        <form className="space-y-4">
+          {Object.keys(canonicalTransaction).map((key) => (
+            <div key={key} className="space-y-4">
+              <label className="capitalize">{key.replaceAll("_", " ")}</label>
+              <Select onValueChange={(a) => setMap({ ...map, [key]: a })}>
+                <SelectTrigger className="w-full bg-white">
+                  <SelectValue placeholder="Select field" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {props.keys.map((value) => (
+                      <SelectItem key={value} value={value}>
+                        {value}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          ))}
+        </form>
+        {Object.keys(map).length > 0 && (
+          <div className="space-y-2">
+            <h3>Preview</h3>
+            <div className="flex items-center justify-between">
+              <small className="pr-2">Our system</small>
+              <div className="w-full flex-1 border border-dashed" />
+              <small className="pr-2">Your uploaded file</small>
+            </div>
+            <ul className="bg-white space-y-2 p-4 rounded-md h-fit shadow-xs border">
+              {Object.entries(map).map(([key, value]) => (
+                <li
+                  key={key}
+                  className="flex text-sm items-center justify-between"
+                >
+                  <code className="whitespace-nowrap px-2 bg-background border shadow-xs rounded-sm">
+                    {key.replaceAll("_", " ")}
+                  </code>
+                  <div className="w-full flex-1 border border-dashed" />
+                  <code className="whitespace-nowrap px-2 bg-background border shadow-xs rounded-sm">
+                    {value}
+                  </code>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <DialogFooter className="justify-between">
+          <Button type="submit" onClick={handleNormalization}>
+            Save mapping
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

@@ -1,10 +1,11 @@
 import { ChevronDown } from "lucide-react";
+import { ReactNode } from "react";
 import { Button } from "./ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export default function ButtonPopover(props: {
   label: string;
-  items: { label: string; onClick?: () => void }[];
+  items: { label: string | ReactNode; onClick?: () => void }[];
   buttonProps?: React.ComponentProps<typeof Button>;
 }) {
   return (

@@ -1,25 +1,32 @@
-import { ReconResultStatus, StatementType } from "./enums";
+import { ReconResultStatus, TransactionType } from "./enums";
 
-export interface Statement {
+export interface CanonicalTransaction {
   id: string;
   created_dt: string;
-  updated_dt: string;
-  processed_dt: string;
-  statement_dt: string;
-  balance: string;
-  currency: string;
-  upload_by: string;
-  type: StatementType;
+  updated_dt?: string;
+  processed_dt?: string;
+  amount: number;
+  currency?: string;
+  upload_by?: string; // user id
+  source_type?: TransactionType;
+  source_name?: string; // MTN, Bank X, ...
+  reference?: string;
+  raw?: Record<string, unknown>;
 }
 
 export interface ReconResult {
-  id: string;
-  created_dt: string;
-  updated_dt: string;
-  notes: string;
+  internal: CanonicalTransaction;
+  provider?: CanonicalTransaction;
   status: ReconResultStatus;
+  rule?: ReconRule["name"];
 }
 
 export interface XlsxResult {
   [key: string]: Record<string, unknown>[];
+}
+
+export interface ReconRule {
+  name: string;
+  buildKey: (tx: CanonicalTransaction) => string | null;
+  match: (a: CanonicalTransaction, b: CanonicalTransaction) => boolean;
 }

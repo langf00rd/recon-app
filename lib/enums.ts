@@ -3,12 +3,13 @@ export enum HelpSidebarKeys {
 }
 
 export enum ReconResultStatus {
-  SUCCESS = "SUCCESS",
-  FAILURE = "FAILURE",
-  PENDING = "PENDING",
+  MATCHED = "MATCHED",
+  MISSING = "MISSING",
+  UNEXPECTED = "UNEXPECTED",
+  AMBIGUOUS = "AMBIGUOUS",
 }
 
-export enum StatementType {
+export enum TransactionType {
   INTERNAL = "INTERNAL",
   PROVIDER = "PROVIDER",
 }

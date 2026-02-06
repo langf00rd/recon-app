@@ -2,11 +2,15 @@
 
 import ButtonPopover from "@/components/button-popover";
 import { DataTable } from "@/components/data-table";
+import NormalizationDialog from "@/components/dialogs/normalization";
 import Header from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyTitle } from "@/components/ui/empty";
+import { reconcile } from "@/lib/engine/reconcile";
+import { TransactionType } from "@/lib/enums";
+import { CanonicalTransaction } from "@/lib/types";
 import { buildColumns, readExcelFile } from "@/lib/utils";
 import { RefreshCcw, Trash2 } from "lucide-react";
 import { useRef, useState } from "react";
@@ -24,9 +28,13 @@ export default function Page() {
     internal: {} as FileContent,
     provider: {} as FileContent,
   });
+  const [normalizedData, setNormalizedData] = useState({
+    internal: [] as CanonicalTransaction[],
+    provider: [] as CanonicalTransaction[],
+  });
 
   const allFilesSelected =
-    filesContent.internal.fileName && filesContent.provider.fileName;
+    !!filesContent.internal.fileName && !!filesContent.provider.fileName;
 
   async function handleUploadFile(type: "internal" | "provider") {
     try {
@@ -50,6 +58,22 @@ export default function Page() {
         `An error occurred while uploading the file. ${(err as Error).message}`,
       );
     }
+  }
+
+  function handleRunRecon() {
+    if (
+      normalizedData.internal.length === 0 ||
+      normalizedData.provider.length === 0
+    ) {
+      toast.error(
+        "Please upload and normalize both internal and provider files",
+      );
+      return;
+    }
+    const internalData = normalizedData.internal;
+    const providerData = normalizedData.provider;
+    const reconResult = reconcile(internalData, providerData);
+    console.log(reconResult);
   }
 
   return (
@@ -97,7 +121,7 @@ export default function Page() {
                 ]}
               />
               {allFilesSelected && (
-                <Button className="bg-primary">
+                <Button className="bg-primary" onClick={handleRunRecon}>
                   Run Reconciliation
                   <RefreshCcw />
                 </Button>
@@ -118,6 +142,25 @@ export default function Page() {
                   <Badge className="bg-white text-foreground border border-black/20 shadow-xs">
                     {content.fileName}
                   </Badge>
+                  <NormalizationDialog
+                    type={key.toUpperCase() as TransactionType}
+                    keys={Object.keys(content.data[0])}
+                    transactions={content.data}
+                    onNormalizedData={(a) =>
+                      setNormalizedData({
+                        ...normalizedData,
+                        [key]: a,
+                      })
+                    }
+                  >
+                    <Button
+                      size="sm"
+                      className="bg-white border shadow-xs"
+                      variant="secondary"
+                    >
+                      Normalize fields
+                    </Button>
+                  </NormalizationDialog>
                   <Button size="icon-xs" variant="destructive-secondary">
                     <Trash2 />
                   </Button>
