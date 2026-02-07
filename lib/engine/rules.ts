@@ -1,7 +1,9 @@
-import { ReconRule } from "../types";
+import { CanoniCalReconRule, ReconRule } from "../types";
 
 const EXACT_RULE: ReconRule = {
   name: "exact_reference_amount_currency",
+  description: "Exact match on reference, amount, and currency",
+  formula: "reference = amount = currency",
   buildKey: (tx) =>
     tx.reference ? `${tx.reference}|${tx.amount}|${tx.currency}` : null,
   match: (a, b) =>
@@ -12,6 +14,8 @@ const EXACT_RULE: ReconRule = {
 
 const AMOUNT_DATE_RULE: ReconRule = {
   name: "amount_currency_date_window",
+  description: "Match on amount, currency, and date within a window",
+  formula: "amount = currency",
   buildKey: (tx) => `${tx.amount}|${tx.currency}`,
   match: (a, b) => {
     if (a.amount !== b.amount) return false;
@@ -24,6 +28,8 @@ const AMOUNT_DATE_RULE: ReconRule = {
 
 const TOLERANT_AMOUNT_RULE: ReconRule = {
   name: "amount_tolerance_currency",
+  description: "Match on amount and currency within a tolerance",
+  formula: "amount = currency + tolerance",
   buildKey: (tx) => `${tx.currency}`,
   match: (a, b) =>
     a.currency === b.currency && Math.abs(a.amount - b.amount) <= 0.01,
@@ -33,4 +39,30 @@ export const RECON_RULES: ReconRule[] = [
   EXACT_RULE,
   AMOUNT_DATE_RULE,
   TOLERANT_AMOUNT_RULE,
+];
+
+export const DEFAULT_RECON_RULES: CanoniCalReconRule[] = [
+  {
+    id: "exact_reference_amount_currency",
+    name: "Exact reference, amount, and currency",
+    description: "Match on exact reference, amount, and currency",
+    priority: 1,
+    enabled: true,
+    conditions: [
+      { left: "reference", operator: "EQUALS", right: "reference" },
+      { left: "amount", operator: "EQUALS", right: "amount" },
+      { left: "currency", operator: "EQUALS", right: "currency" },
+    ],
+  },
+  {
+    id: "amount_tolerance_currency",
+    name: "Amount tolerance + currency",
+    description: "Match on amount and currency within a tolerance",
+    priority: 3,
+    enabled: true,
+    conditions: [
+      { left: "currency", operator: "EQUALS", right: "currency" },
+      { left: "amount", operator: "ABS_DIFF_LTE", value: 1.0 },
+    ],
+  },
 ];

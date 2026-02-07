@@ -138,5 +138,9 @@ p {
 }
 
 code {
-    @apply font-mono;
+    @apply font-mono whitespace-nowrap px-2 bg-background border shadow-xs rounded-sm;
+}
+
+fieldset {
+    @apply space-y-1;
 }

@@ -39,15 +39,6 @@ export default function NormalizationDialog(props: {
     created_dt: "",
     id: "",
     reference: "",
-    // currency: "",
-    // transaction_dt: "",
-    // id: "",
-    // updated_dt: "",
-    // processed_dt: "",
-    // source_name: "",
-    // source: "TransactionType",
-    // upload_by: "",
-    // raw: {},
   };
 
   function handleNormalization() {
@@ -105,13 +96,9 @@ export default function NormalizationDialog(props: {
                   key={key}
                   className="flex text-sm items-center justify-between"
                 >
-                  <code className="whitespace-nowrap px-2 bg-background border shadow-xs rounded-sm">
-                    {key.replaceAll("_", " ")}
-                  </code>
+                  <code>{key.replaceAll("_", " ")}</code>
                   <div className="w-full flex-1 border border-dashed" />
-                  <code className="whitespace-nowrap px-2 bg-background border shadow-xs rounded-sm">
-                    {value}
-                  </code>
+                  <code>{value}</code>
                 </li>
               ))}
             </ul>

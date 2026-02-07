@@ -1,5 +1,6 @@
 "use client";
 
+import ButtonPopover from "@/components/button-popover";
 import Header from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -39,7 +40,25 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
-      <Header title="Exceptions" />
+      <Header
+        title="Exceptions"
+        slotRight={
+          groupedReconResults &&
+          Object.keys(groupedReconResults).length > 0 && (
+            <ButtonPopover
+              label="Export"
+              items={[
+                {
+                  label: "CSV",
+                },
+                {
+                  label: "XLSX",
+                },
+              ]}
+            />
+          )
+        }
+      />
 
       <div className="flex items-center w-full justify-between">
         <div>

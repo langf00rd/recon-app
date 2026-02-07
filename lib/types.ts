@@ -1,5 +1,5 @@
 import { LucideIcon } from "lucide-react";
-import { ReconResultStatus, TransactionType } from "./enums";
+import { ReconResultStatus, ReconRuleOperator, TransactionType } from "./enums";
 
 export interface CanonicalTransaction {
   id: string;
@@ -26,10 +26,26 @@ export interface XlsxResult {
   [key: string]: Record<string, unknown>[];
 }
 
-export interface ReconRule {
-  name: string;
+export interface ReconRule extends Partial<CanoniCalReconRule> {
+  formula?: string;
   buildKey: (tx: CanonicalTransaction) => string | null;
   match: (a: CanonicalTransaction, b: CanonicalTransaction) => boolean;
+}
+
+export interface CanoniCalReconRule {
+  id: string;
+  name: string;
+  description?: string;
+  priority: number;
+  enabled: boolean;
+  conditions: RuleCondition[];
+}
+
+interface RuleCondition {
+  left: keyof CanonicalTransaction;
+  operator: ReconRuleOperator;
+  right?: keyof CanonicalTransaction;
+  value?: string | number;
 }
 
 export interface AppSidebarMenu {
