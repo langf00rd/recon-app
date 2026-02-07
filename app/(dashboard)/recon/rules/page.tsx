@@ -85,7 +85,7 @@ export default function Page() {
                             </small>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Add to library</p>
+                            <p>...</p>
                           </TooltipContent>
                         </Tooltip>
                         <code className="bg-white!">

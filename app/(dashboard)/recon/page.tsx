@@ -1,6 +1,7 @@
 "use client";
 
 import ButtonPopover from "@/components/button-popover";
+import { HorizontalDashedLine } from "@/components/dashed-line";
 import { DataTable } from "@/components/data-table";
 import NormalizationDialog from "@/components/dialogs/normalization";
 import Header from "@/components/header";
@@ -8,6 +9,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyTitle } from "@/components/ui/empty";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { useAppContext } from "@/hooks/use-app-context";
 import { reconcile } from "@/lib/engine/reconcile";
 import { TransactionType } from "@/lib/enums";
@@ -26,7 +32,7 @@ interface FileContent {
 
 export default function Page() {
   const router = useRouter();
-  const { setReconResult, reconRules } = useAppContext();
+  const { setReconResult, reconRules, enabledReconRules } = useAppContext();
   const internalFilePickerRef = useRef<HTMLInputElement>(null);
   const providerFilePickerRef = useRef<HTMLInputElement>(null);
   const [filesContent, setFilesContent] = useState({
@@ -156,6 +162,39 @@ export default function Page() {
       />
 
       <div className="space-y-10">
+        {allFilesSelected && (
+          <div className="space-y-2">
+            <h2>Recon rules: </h2>
+            <div className="flex items-center">
+              {Array(enabledReconRules.length)
+                .fill(null)
+                .map((_, index) => (
+                  <div key={index} className="flex gap-1 items-center">
+                    <HoverCard openDelay={100} closeDelay={200}>
+                      <HoverCardTrigger>
+                        <code className="bg-white! cursor-help flex items-center p-1 gap-1 rounded-full!">
+                          <Badge className="scale-[0.75]">{index + 1}</Badge>
+                          {enabledReconRules[index].name}
+                        </code>
+                      </HoverCardTrigger>
+                      <HoverCardContent>
+                        {
+                          reconRules.find(
+                            (rule) =>
+                              rule.name === enabledReconRules[index].name,
+                          )?.description
+                        }
+                      </HoverCardContent>
+                    </HoverCard>
+                    {index !== enabledReconRules.length - 1 && (
+                      <HorizontalDashedLine className="w-12.5" />
+                    )}
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+
         {Object.entries(filesContent).map(([key, content]) => {
           if (!content.fileName) return;
           return (

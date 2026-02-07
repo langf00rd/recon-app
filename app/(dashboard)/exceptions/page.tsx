@@ -3,6 +3,7 @@
 import ButtonPopover from "@/components/button-popover";
 import { HorizontalDashedLine } from "@/components/dashed-line";
 import Header from "@/components/header";
+import HelpMessage from "@/components/help-message";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -29,7 +30,7 @@ import {
 import { useAppContext } from "@/hooks/use-app-context";
 import { RECON_STATUS_DEFS } from "@/lib/content";
 import { ReconResultStatus } from "@/lib/enums";
-import { Check, HelpCircle, Info, Search } from "lucide-react";
+import { Check, HelpCircle, Search } from "lucide-react";
 import { useState } from "react";
 
 export default function Home() {
@@ -98,12 +99,7 @@ export default function Home() {
         </div>
       </div>
 
-      <p className="flex items-start bg-neutral-200/40 border p-2 px-3 rounded-sm gap-2">
-        <div className="relative top-1">
-          <Info size={16} />
-        </div>
-        {RECON_STATUS_DEFS[selectedStatus]}
-      </p>
+      <HelpMessage>{RECON_STATUS_DEFS[selectedStatus]}</HelpMessage>
 
       {groupedReconResults && Object.keys(groupedReconResults).length === 0 && (
         <Empty>
@@ -153,6 +149,7 @@ export default function Home() {
                   },
                 )}
               </div>
+
               <HorizontalDashedLine />
 
               {item.rule && (

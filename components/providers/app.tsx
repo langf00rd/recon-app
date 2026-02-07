@@ -30,6 +30,7 @@ const useAppContextValue = () => {
     setReconResult,
     groupedReconResults: getGroupedReconResults(),
     reconRules,
+    enabledReconRules: reconRules.filter((rule) => rule.enabled),
     setReconRules,
   };
 };
