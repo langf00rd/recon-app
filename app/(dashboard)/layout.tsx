@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <TooltipProvider>
           <AppProvider>
             <AppSidebar />
-            <Toaster />
+            <Toaster position="bottom-center" />
             <main className="relative w-full overflow-y-scroll h-screen p-10">
               {children}
             </main>
