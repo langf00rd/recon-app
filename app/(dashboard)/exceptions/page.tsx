@@ -1,6 +1,7 @@
 "use client";
 
 import ButtonPopover from "@/components/button-popover";
+import { HorizontalDashedLine } from "@/components/dashed-line";
 import Header from "@/components/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,11 @@ import {
   EmptyDescription,
   EmptyTitle,
 } from "@/components/ui/empty";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -22,8 +28,9 @@ import {
 } from "@/components/ui/select";
 import { useAppContext } from "@/hooks/use-app-context";
 import { RECON_STATUS_DEFS } from "@/lib/content";
+import { DEFAULT_RECON_RULES } from "@/lib/engine/rules";
 import { ReconResultStatus } from "@/lib/enums";
-import { Check, Info, Search } from "lucide-react";
+import { Check, HelpCircle, Info, Search } from "lucide-react";
 import { useState } from "react";
 
 export default function Home() {
@@ -113,48 +120,69 @@ export default function Home() {
       <div className="grid grid-cols-3 gap-4">
         {groupedReconResults?.[selectedStatus]?.map((item, index) => (
           <Card key={index}>
-            <CardContent className="space-y-4">
-              <p>{new Date().toLocaleString().substring(0, 8)}</p>
-
-              <hr />
-
-              <div className="space-y-2">
-                <h3 className="uppercase">Internal</h3>
+            <CardContent className="flex flex-col h-full gap-4 justify-between">
+              <div className="space-y-3">
+                <h3 className="uppercase text-foreground/70!">Internal</h3>
                 {Object.entries({ ...item.internal, raw: undefined }).map(
                   ([key, value]) => {
                     if (!value) return;
                     return (
                       <p key={key} className="text-sm">
-                        <span className="">{key.replaceAll("_", " ")}</span>:{" "}
-                        {value}
+                        <code className="font-medium uppercase">
+                          {key.replaceAll("_", " ")}
+                        </code>{" "}
+                        <span className="text-foreground">{value}</span>
                       </p>
                     );
                   },
                 )}
               </div>
-
-              <hr />
-
-              <div className="space-y-2">
-                <h3 className="uppercase">Provider</h3>
+              <HorizontalDashedLine />
+              <div className="space-y-3">
+                <h3 className="uppercase text-foreground/70!">Provider</h3>
                 {Object.entries({ ...item.provider, raw: undefined }).map(
                   ([key, value]) => {
                     if (!value) return;
                     return (
                       <p key={key} className="text-sm">
-                        <span className="">{key.replaceAll("_", " ")}</span>:{" "}
-                        {value}
+                        <code className="font-medium uppercase">
+                          {key.replaceAll("_", " ")}
+                        </code>{" "}
+                        <span className="text-foreground">{value}</span>
                       </p>
                     );
                   },
                 )}
               </div>
-
-              <hr />
-
-              {item.rule && <p>RULE: {item.rule}</p>}
+              <HorizontalDashedLine />
+              {item.rule && (
+                <div className="space-y-3">
+                  <h3 className="uppercase text-foreground/70!">RULE</h3>
+                  <HoverCard openDelay={100} closeDelay={200}>
+                    <HoverCardTrigger>
+                      <p className="flex cursor-help items-center gap-1">
+                        {item.rule}{" "}
+                        <HelpCircle size={14} className="opacity-50" />
+                      </p>
+                    </HoverCardTrigger>
+                    <HoverCardContent>
+                      {(() => {
+                        const rule = DEFAULT_RECON_RULES.find(
+                          (rule) => rule.id === item.rule,
+                        );
+                        return (
+                          <div className="space-y-2">
+                            <h3>{rule?.name}</h3>
+                            <p>{rule?.description}</p>
+                          </div>
+                        );
+                      })()}
+                    </HoverCardContent>
+                  </HoverCard>
+                </div>
+              )}
             </CardContent>
-            <CardFooter>
+            <CardFooter className="justify-end">
               <Button variant="outline">
                 Mark as Resolved
                 <Check />
@@ -162,26 +190,6 @@ export default function Home() {
             </CardFooter>
           </Card>
         ))}
-      </div>
-
-      {/*
-      <DataTable
-        columns={CANONICAL_COLUMNS}
-        data={groupedReconResults?.[selectedStatus] || []}
-      />*/}
-
-      <div>
-        {/*{Object.keys(groupedReconResults).map((key) => (
-          <div key={key}>
-            <h2>{key}</h2>
-            {groupedReconResults[key].map((a, index) => (
-              <div key={index}>
-                <p>{new Date().toLocaleString().substring(0, 8)}</p>
-                <p>{JSON.stringify(a.internal)}</p>
-              </div>
-            ))}
-          </div>
-        ))}*/}
       </div>
     </div>
   );
