@@ -10,3 +10,5 @@ export const RECON_STATUS_DEFS = {
   [ReconResultStatus.UNEXPECTED]:
     "Provider transactions with no matching internal record - may indicate direct integrations or bypassed systems",
 };
+
+export const APP_NAME = "reecon";

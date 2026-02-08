@@ -77,3 +77,22 @@ export interface AppSidebarMenuItem {
   enabled: boolean;
   children?: AppSidebarMenuItem[];
 }
+
+export interface CountriesApiItem {
+  flag: string;
+  cca2: string;
+  name: {
+    common: string;
+    official: string;
+    nativeName: {
+      cat: {
+        official: string;
+        common: string;
+      };
+    };
+  };
+  idd: {
+    root: string;
+    suffixes: string[];
+  };
+}
