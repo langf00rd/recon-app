@@ -1,4 +1,5 @@
 import Providers from "@/components/providers";
+import { APP_NAME } from "@/lib/content";
 import type { Metadata } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
 import { Toaster } from "sonner";
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "reconciliation tool",
+  title: APP_NAME,
 };
 
 export default function RootLayout({
