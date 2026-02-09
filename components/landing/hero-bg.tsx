@@ -4,7 +4,7 @@ import PixelBlast from "@/components/pixel-blast";
 
 export default function HeroBackground() {
   return (
-    <div className="w-screen h-screen fixed top-0 left-0">
+    <div className="w-screen h-full absolute top-0 left-0">
       <PixelBlast
         variant="triangle"
         pixelSize={2}
