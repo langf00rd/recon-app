@@ -3,8 +3,9 @@ import HeroBackground from "@/components/landing/hero-bg";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/routes";
-import { ChevronRight, Link } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { Balancer } from "react-wrap-balancer";
 
 export default async function Home() {
