@@ -1,4 +1,6 @@
+import { ContainerScroll } from "@/components/animation/container-scroll-animation";
 import { DemoEmailCollectionDialog } from "@/components/dialogs/demo-email-collection";
+import Hero from "@/components/landing/hero";
 import HeroBackground from "@/components/landing/hero-bg";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
@@ -11,6 +13,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { cookies } from "next/headers";
+import Image from "next/image";
 import Link from "next/link";
 import { Balancer } from "react-wrap-balancer";
 
@@ -25,7 +28,7 @@ export default async function Home() {
           <div className="flex gap-2">
             <Logo />
           </div>
-          <nav className="flex-2 md:max-w-44 hidden md:block">
+          <nav className="md:flex-2 w-[170px] md:max-w-44">
             <ul className="flex items-center justify-between pr-8">
               {["company", "pricing"].map((item, index) => (
                 <li
@@ -40,49 +43,11 @@ export default async function Home() {
         </div>
       </header>
 
-      <div className="snap-y snap-mandatory h-screen overflow-y-scroll">
-        <section className="relative h-[100vh] px-5 snap-start">
-          <HeroBackground />
-          <div className="relative w-full h-full flex items-center justify-center flex-col gap-8 md:text-center">
-            <h1 className="text-[2.2rem] md:text-[5rem] md:leading-[1.2] max-w-250">
-              <Balancer>Transaction Reconciliation Minus the Chaos</Balancer>
-            </h1>
-            <p className="text-xl md:text-[1.5rem] max-w-200">
-              <Balancer>
-                A fintech reconciliation tool built for high-volume payments. No
-                spreadsheets. No guesswork. No late nights.
-              </Balancer>
-            </p>
-            <div className="flex md:flex-row w-full md:w-fit md:items-center mt-4 gap-4 md:gap-12">
-              <DemoEmailCollectionDialog>
-                <Button className="scale-[1.1] md:scale-[1.3]">
-                  Join early access
-                </Button>
-              </DemoEmailCollectionDialog>
-              {hasFilledEarlyAccessForm ? (
-                <Link href={ROUTES.overview}>
-                  <Button
-                    variant="ghost"
-                    className="scale-[1.1] md:scale-[1.3]"
-                  >
-                    Try demo
-                    <ChevronRight size={18} />
-                  </Button>
-                </Link>
-              ) : (
-                <DemoEmailCollectionDialog isUsingDemo>
-                  <Button
-                    variant="ghost"
-                    className="scale-[1.1] md:scale-[1.3]"
-                  >
-                    Try demo
-                    <ChevronRight size={18} />
-                  </Button>
-                </DemoEmailCollectionDialog>
-              )}
-            </div>
-          </div>
-        </section>
+      <div
+        id="landing_main"
+        className="snap-y snap-mandatory h-screen overflow-y-scroll overflow-x-hidden"
+      >
+        <Hero hasFilledEarlyAccessForm={hasFilledEarlyAccessForm} />
 
         <section className="h-screen bg-neutral-200/30 snap-start">
           <div className="px-10 py-32 max-w-[1200px] flex-col mx-auto flex justify-center h-full">
@@ -107,25 +72,61 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="h-screen snap-start">
-          <div className="px-10 py-32 max-w-[1200px] flex-col mx-auto flex justify-center h-full">
-            <h1 className="text-[2rem] md:text-[4.2rem] mb-10">
-              Introducing Reecon
-            </h1>
-            <ol className="text-black text-[1.4rem] space-y-10 md:space-y-4 md:text-[3rem]">
-              <li className="flex md:items-center flex-col md:flex-row gap-4">
-                <ShieldCheck className="md:size-[42px] opacity-50" /> Built for
-                auditability, security, and privacy
-              </li>
-              <li className="flex md:items-center flex-col md:flex-row gap-4">
-                <ScrollText className="md:size-[42px] opacity-50" /> Safe
-                storage of internal &amp; provider transactions
-              </li>
-              <li className="flex md:items-center flex-col md:flex-row gap-4">
-                <FolderSymlink className="md:size-[42px] opacity-50" />{" "}
-                Deterministic matching + exception handling
-              </li>
-            </ol>
+        <section className="h-screen snap-start overflow-hidden">
+          <div className="flex w-full h-full">
+            <div className="flex-1 md:w-[50%] h-full flex justify-center p-5 md:p-24 flex-col">
+              <h1 className="text-[2rem] md:text-[3.4rem] mb-10">
+                Introducing Reecon
+              </h1>
+              <ol className="text-black text-[1.4rem] space-y-10 md:space-y-4 md:text-[1.7rem]">
+                <li className="flex md:items-center flex-col md:flex-row md:gap-4">
+                  <ShieldCheck className="md:size-[42px] opacity-50" /> Built
+                  for auditability, security, and privacy
+                </li>
+                <li className="flex md:items-center flex-col md:flex-row md:gap-4">
+                  <ScrollText className="md:size-[42px] opacity-50" /> Safe
+                  storage of internal &amp; provider transactions
+                </li>
+                <li className="flex md:items-center flex-col md:flex-row md:gap-4">
+                  <FolderSymlink className="md:size-[42px] opacity-50" />{" "}
+                  Deterministic matching + exception handling
+                </li>
+              </ol>
+            </div>
+            <div className="flex-1 overflow-y-scroll overflow-x-hidden h-[100%] hidden md:block md:w-[50%]">
+              <Image
+                id="landing_main_hero_img"
+                className="max-w-[1200px]"
+                src="/assets/landing/uploaded-docs.png"
+                width={1920}
+                height={1080}
+                alt="screenshot of dashboard matched recon records"
+              />
+              <Image
+                id="landing_main_hero_img"
+                className="max-w-[1200px]"
+                src="/assets/landing/recon-rules.png"
+                width={1920}
+                height={1080}
+                alt="screenshot of dashboard matched recon records"
+              />
+              <Image
+                id="landing_main_hero_img"
+                className="max-w-[1200px]"
+                src="/assets/landing/uploaded-docs-2.png"
+                width={1920}
+                height={1080}
+                alt="screenshot of dashboard matched recon records"
+              />
+              <Image
+                id="landing_main_hero_img"
+                className="max-w-[1200px]"
+                src="/assets/landing/matched-records.png"
+                width={1920}
+                height={1080}
+                alt="screenshot of dashboard matched recon records"
+              />
+            </div>
           </div>
         </section>
 
